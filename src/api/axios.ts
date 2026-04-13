@@ -12,4 +12,20 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// Handle expired / invalid token
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // remove token
+      localStorage.removeItem("token");
+
+      // notify React (same tab)
+      window.dispatchEvent(new Event("auth-change"));
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default API;

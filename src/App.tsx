@@ -11,7 +11,7 @@ import Profile from "./pages/Profile";
 function App() {
   return (
     <>
-      {/* Navbar always visible (optional) */}
+      {/* Navbar always visible */}
       <Navbar />
 
       <Routes>
