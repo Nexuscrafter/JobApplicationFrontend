@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CreateJob from "./pages/CreateJob";
 import Register from "./pages/register";
 import Profile from "./pages/Profile";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (
@@ -42,18 +43,18 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <AdminDashboard />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         {/* Protected Create Job */}
         <Route
           path="/create-job"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <CreateJob />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
       </Routes>

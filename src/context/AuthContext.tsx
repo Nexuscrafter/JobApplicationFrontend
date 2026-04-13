@@ -2,11 +2,13 @@ import { createContext, useState, useEffect } from "react";
 
 interface AuthType {
   token: string | null;
+  role: string | null;
   setToken: (token: string | null) => void;
 }
 
 export const AuthContext = createContext<AuthType>({
   token: null,
+  role: null,
   setToken: () => {},
 });
 
@@ -15,10 +17,23 @@ export const AuthProvider = ({ children }: any) => {
     localStorage.getItem("token")
   );
 
-  // sync token with localStorage
+  const [role, setRole] = useState<string | null>(null);
+
+  // sync token with localStorage + extract role
   useEffect(() => {
-    if (token) localStorage.setItem("token", token);
-    else localStorage.removeItem("token");
+    if (token) {
+      localStorage.setItem("token", token);
+
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setRole(payload.role || null); 
+      } catch {
+        setRole(null);
+      }
+    } else {
+      localStorage.removeItem("token");
+      setRole(null);
+    }
   }, [token]);
 
   // listen to interceptor-triggered changes
@@ -35,7 +50,7 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ token, role, setToken }}>
       {children}
     </AuthContext.Provider>
   );
